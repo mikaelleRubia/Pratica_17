@@ -53,18 +53,42 @@ public:
 bool add_Produto(Estoque &estoque);
 int buscarProduto(Estoque estoque);
 
+class Carrinho{
+    private:
+       vector<Produto> produtos;
+       int qtd;
+    public:
+        Carrinho();
+        Carrinho(Produto produto, int qtd);
+        vector<Produto> getProdutos();
+        int getQtd();
+        void setQtd(int qtd);   
+        void calcularValorTotal();
+        void exibirCarrinho();
+        bool estaVazio() const;
+          
+};
+
+
+
 int menu();
 int menuEstoque();
 int menuVendas();
+int menuCarrinho();
 
 void pause();
 void limpaTela();
 
 int main()
 {
-    // Produto p1(1, "Arroz", 5.48);
-    // Produto p2(2, "Feijao", 7.99);
-    // Produto p3(3, "Macarrao", 1.85);
+    Produto p1(1, "Arroz", 5.48);
+    Produto p2(2, "Feijao", 7.99);
+    Produto p3(3, "Macarrao", 1.85);
+    Carrinho carrinho;
+
+    // Carrinho carrinho(p1, 3);
+
+    
 
     int opc, opc2, auxInt,auxInt2;
     char sn;
@@ -199,6 +223,51 @@ int main()
                 }
             } while (opc2 != 0);
             break;
+        case 3:
+           
+            do
+            {
+                limpaTela();
+                opc2 = menuCarrinho();
+                switch (opc2)
+                {
+                case 1:
+                    limpaTela();
+                    // função de add produto no carrinho
+                    pause();
+                    break;
+                case 2:
+                    limpaTela();
+                    
+                    pause();
+                    break;
+                case 3:
+                    limpaTela();
+
+                    if(carrinho.estaVazio()){
+                        cout << "Carrinho vazio" << endl;
+                    }else{
+                        carrinho.exibirCarrinho();
+
+                    }
+
+                    pause();
+                    break;
+                case 4:
+                    limpaTela();
+                    // função de remover produto no carrinho
+                    pause();
+                    break;
+                case 0:
+
+                    break;
+                default:
+                    limpaTela();
+                    cout << "Opcao invalida!" << endl;
+                    pause();
+                }
+            } while (opc2 != 0);
+            break;    
         case 0:
             break;
         default:
@@ -409,6 +478,51 @@ bool add_Produto(Estoque &estoque)
     return true;
 }
 
+Carrinho::Carrinho()
+{
+    this->produtos.resize(0);
+    this->qtd = 0;
+}
+
+Carrinho::Carrinho(Produto produtos, int qta)
+{
+    this->produtos.push_back(produtos);
+    this->qtd = qta;
+}
+
+vector<Produto> Carrinho::getProdutos(){
+    return this->produtos;
+}
+
+bool Carrinho::estaVazio() const {
+        return produtos.empty();
+}
+
+void Carrinho::exibirCarrinho()
+{
+    cout << "#############  lista de produtos no carrinho #############" << endl;
+    for (int i = 0; i < int(this->produtos.size()); i++)
+    {
+        cout << "\t" << " - "<< this->produtos[i].getNome() << "(" << 
+        this->produtos[i].getPreco() << ") "<< "x " << qtd << endl;
+       
+    }
+}
+
+int menuCarrinho()
+{
+    int op;
+    cout << "######### Menu Carrinho #########" << endl;
+    cout << "1 - Adicionar produto no carrinho" << endl;
+    cout << "2 - Calcular valor total" << endl;
+    cout << "3 - Listar produto do carrinho" << endl;
+    cout << "4 - Remover produto do carrinho" << endl;
+    cout << "0 - Voltar ao menu principal" << endl;
+    cout << "\nEscolha uma opcao: ";
+    cin >> op;
+    return op;
+}
+
 int menuEstoque()
 {
     int op;
@@ -444,8 +558,10 @@ int menu()
     cout << "######### Menu Principal #########" << endl;
     cout << "1 - Gerenciar Estoque" << endl;
     cout << "2 - Gerenciar Vendas" << endl;
+    cout << "3 - Gerenciar Carrinho" << endl;
     cout << "0 - Sair" << endl;
     cout << "\nEscolha uma opcao: ";
     cin >> op;
     return op;
 }
+
