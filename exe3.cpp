@@ -60,7 +60,6 @@ int main()
     int opc, opc2, auxInt;
     char sn;
     Estoque estoque = Estoque();
-
     do
     {
         limpaTela();
