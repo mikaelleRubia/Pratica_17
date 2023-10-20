@@ -6,9 +6,30 @@
 
 using namespace std;
 
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
 class Produto{
-    
+    private:
+        int codigo;
+        string nome;
+        double preco;
+    public:
+        Produto() : codigo(0), nome(""), preco(0.0) {};
+        Produto(int _codigo, string _nome, double _preco);
+        void setCodigo(int _codigo);
+        void setNome(string _nome);
+        void setPreco(double _preco);
+        int getCodigo();
+        string getNome();
+        double getPreco();
+        void exibirProduto();
 };
+
+
+ 
 class Estoque{
     int codigo;
     vector<Produto> produtos;
@@ -33,6 +54,11 @@ void limpaTela();
 
 
 int main(){
+    // Produto p1(1, "Arroz", 5.48);
+    // Produto p2(2, "Feijao", 7.99);
+    // Produto p3(3, "Macarrao", 1.85);   
+
+
     int opc, opc2;
     Estoque estoque = Estoque();
 
@@ -122,6 +148,50 @@ void limpaTela()
         system("clear");
     }
 }
+
+//////
+// Produto
+//////
+
+   Produto::Produto(int _codigo, string _nome, double _preco){
+        codigo = _codigo;
+        nome = _nome;
+        preco = _preco;
+    }
+
+    void Produto::setCodigo(int _codigo){
+        codigo = _codigo;
+    }
+
+    void Produto::setNome(string _nome){
+        nome = _nome;
+    }
+
+    void Produto::setPreco(double _preco){
+        preco = _preco;
+    }
+
+    int Produto::getCodigo(){
+        return codigo;
+    }
+
+    string Produto::getNome(){
+        return nome;
+    }
+
+    double Produto::getPreco(){
+        return preco;
+    }
+
+    void Produto::exibirProduto() {
+    cout << "Codigo: " << getCodigo() << endl;
+    cout << "Nome: " << getNome() << endl;
+    cout << "Preco: " << getPreco() << endl;
+}
+
+//////
+// Estouque
+/////
 
 Estoque::Estoque(){
     this->codigo = -1;
