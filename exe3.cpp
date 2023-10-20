@@ -61,6 +61,8 @@ class Carrinho{
         Carrinho();
         Carrinho(Produto produto, int qtd);
         vector<Produto> getProdutos();
+        void adicionarProduto(Produto produto, int qtde);
+        void removerProduto(Produto  produto, int qtde);
         int getQtd();
         void setQtd(int qtd);   
         void calcularValorTotal();
@@ -492,6 +494,22 @@ Carrinho::Carrinho(Produto produtos, int qta)
 
 vector<Produto> Carrinho::getProdutos(){
     return this->produtos;
+}
+
+void Carrinho::adicionarProduto(Produto produto, int qtde){
+    for(int i = 0; i < qtde; i++) this->produtos.push_back(produto);
+}
+
+void Carrinho::removerProduto(Produto produto, int qtde){
+    int removidos = 0;
+    for(int i = 0; i < produtos.size(); i++){
+        if(produtos[i].getCodigo() == produto.getCodigo() && removidos < qtde){
+            produtos.erase(produtos.begin() + i);
+            removidos++;
+        }
+    }
+
+    cout<<"Foram removidos "<<removidos<<" "<<produto.getNome()<<"(s) do carrinho!"<<endl;
 }
 
 bool Carrinho::estaVazio() const {
