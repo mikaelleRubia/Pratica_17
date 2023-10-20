@@ -6,6 +6,11 @@
 
 using namespace std;
 
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
 class Produto
 {
 private:
@@ -57,9 +62,14 @@ void limpaTela();
 
 int main()
 {
-    int opc, opc2, auxInt;
+    // Produto p1(1, "Arroz", 5.48);
+    // Produto p2(2, "Feijao", 7.99);
+    // Produto p3(3, "Macarrao", 1.85);
+
+    int opc, opc2, auxInt,auxInt2;
     char sn;
     Estoque estoque = Estoque();
+
     do
     {
         limpaTela();
@@ -109,8 +119,23 @@ int main()
                     break;
                 case 3:
                     limpaTela();
-                    cout << "Alterar quantidade de um produto" << endl;
-                    pause();
+                    auxInt = buscarProduto(estoque);
+                    if (auxInt == -1)
+                    {
+                        cout << "Produto nao encontrado!" << endl;
+                        pause();
+                        break;
+                    }
+                    else
+                    {
+                        cout << "Nome do produto: " << estoque.getProdutos()[auxInt].getNome() << endl;
+                        cout << "Quantidade atual em estoque: " << estoque.getQtd_Produto()[auxInt] << endl;
+                        cout << "Digite a nova quantidade do produto no estoque: ";
+                        cin >> auxInt2;
+                        estoque.alterar(auxInt, auxInt2);
+                        cout << "Produto alterado com sucesso!" << endl;
+                        pause();
+                    }
                     break;
                 case 4:
                     limpaTela();
@@ -210,6 +235,10 @@ void limpaTela()
     }
 }
 
+//////
+// Produto
+//////
+
 Produto::Produto(int _codigo, string _nome, double _preco)
 {
     codigo = _codigo;
@@ -253,6 +282,10 @@ void Produto::exibirProduto()
     cout << "Nome: " << getNome() << endl;
     cout << "Preco: " << getPreco() << endl;
 }
+
+//////
+// Estouque
+/////
 
 Estoque::Estoque()
 {
