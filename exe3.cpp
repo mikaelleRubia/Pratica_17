@@ -53,14 +53,47 @@ public:
 bool add_Produto(Estoque &estoque);
 int buscarProduto(Estoque estoque);
 
+class ProdutoCarrinho{
+    private:
+        Produto produto;
+        int qtde = 0;
+    public:
+        ProdutoCarrinho(Produto, int);
+        Produto getProduto();
+        int getQuantidade();
+        void adiciona_qtde(int);
+        void remove_qtde(int);
+};
+
+ProdutoCarrinho::ProdutoCarrinho(Produto produto, int qtde){
+    this->produto = produto;
+    this->qtde = qtde;
+}
+
+Produto ProdutoCarrinho::getProduto(){
+    return produto;
+}
+
+int ProdutoCarrinho::getQuantidade(){
+    return qtde;
+}
+
+void ProdutoCarrinho::adiciona_qtde(int q){
+    qtde += q;
+}
+
+void ProdutoCarrinho::remove_qtde(int q){
+    qtde -= q;
+}
+
 class Carrinho{
     private:
-       vector<Produto> produtos;
+       vector<ProdutoCarrinho> produtos;
        int qtd;
     public:
         Carrinho();
         Carrinho(Produto produto, int qtd);
-        vector<Produto> getProdutos();
+        vector<ProdutoCarrinho> getProdutos();
         void adicionarProduto(Produto produto, int qtde);
         void removerProduto(Produto  produto, int qtde);
         int getQtd();
@@ -492,24 +525,38 @@ Carrinho::Carrinho(Produto produtos, int qta)
     this->qtd = qta;
 }
 
-vector<Produto> Carrinho::getProdutos(){
+vector<ProdutoCarrinho> Carrinho::getProdutos(){
     return this->produtos;
 }
 
 void Carrinho::adicionarProduto(Produto produto, int qtde){
-    for(int i = 0; i < qtde; i++) this->produtos.push_back(produto);
-}
-
-void Carrinho::removerProduto(Produto produto, int qtde){
-    int removidos = 0;
     for(int i = 0; i < produtos.size(); i++){
-        if(produtos[i].getCodigo() == produto.getCodigo() && removidos < qtde){
-            produtos.erase(produtos.begin() + i);
-            removidos++;
+        if(produtos[i].getProduto().getCodigo() == produto.getCodigo()){
+            produtos[i].adiciona_qtde(qtde);
+            return;
         }
     }
 
-    cout<<"Foram removidos "<<removidos<<" "<<produto.getNome()<<"(s) do carrinho!"<<endl;
+    ProdutoCarrinho produtoCarrinho = ProdutoCarrinho(produto, qtde);
+    produtos.push_back(produtoCarrinho);
+}
+
+void Carrinho::removerProduto(Produto produto, int qtde){
+    for(int i = 0; i < produtos.size(); i++){
+        if(produtos[i].getProduto().getCodigo() == produto.getCodigo()){
+            if(produtos[i].getQuantidade() > qtde){
+                produtos[i].remove_qtde(qtde);
+                cout<<"Foram removidos "<<qtde<<" "<<produto.getNome()<<"(s) do carrinho!"<<endl;
+                return;
+            } else {
+                produtos.erase(produtos.begin() + i);
+                cout<<"Foram removidos todos os(as) "<<produto.getNome()<<" do carrinho!"<<endl;            
+                return;
+            }
+        }
+    }
+
+    cout<<"Nao existe nenhum(a) "<<produto.getNome()<<" no carrinho!"<<endl;
 }
 
 bool Carrinho::estaVazio() const {
@@ -521,8 +568,8 @@ void Carrinho::exibirCarrinho()
     cout << "#############  lista de produtos no carrinho #############" << endl;
     for (int i = 0; i < int(this->produtos.size()); i++)
     {
-        cout << "\t" << " - "<< this->produtos[i].getNome() << "(" << 
-        this->produtos[i].getPreco() << ") "<< "x " << qtd << endl;
+        cout << "\t" << " - "<< this->produtos[i].getProduto().getNome() << "(" << 
+        this->produtos[i].getProduto().getPreco() << ") "<< "x " << qtd << endl;
        
     }
 }
